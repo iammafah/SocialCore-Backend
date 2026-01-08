@@ -1,0 +1,21 @@
+## 📦 Packages
+
+# Core Flask
+Flask==3.0.0
+
+# Database + ORM
+SQLAlchemy==2.0.25
+Flask-SQLAlchemy==3.1.1
+
+# MySQL Driver
+PyMySQL==1.1.0
+
+# Migrations
+Flask-Migrate==4.0.5
+alembic==1.13.1
+
+# Validation
+marshmallow==3.21.1
+
+# Environment variables
+python-dotenv==1.0.0
