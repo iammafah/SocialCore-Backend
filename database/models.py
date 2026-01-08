@@ -6,3 +6,8 @@ class Contact(db.Model):         # ORM model for contact messages
     FullName = db.Column(db.String(100), nullable=False) # Sender full name
     Email = db.Column(db.String(100), nullable=False)    # Sender email address
     Message = db.Column(db.Text, nullable=False)         # Message content
+    created_at = db.Column(
+    db.DateTime,
+    nullable=False,
+    server_default=db.func.now()
+)                                                             # Timestamp

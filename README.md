@@ -6,6 +6,8 @@ incoming requests using Marshmallow and securely stores data in a MySQL
 database via SQLAlchemy. The project follows industry-standard backend
 architecture and best practices.
 
+---
+
 <p align="center">
   <img src="https://res.cloudinary.com/darzb0s3m/image/upload/v1767882824/camap_1_fonzr8.webp" alt="Project Preview" width="700">
 </p>
