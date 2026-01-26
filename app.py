@@ -4,12 +4,18 @@ from config import Config                     # App configuration
 from routes.api import api_bp                 # API blueprint
 from database.models import Contact
 
+
 def create_app():
     app = Flask(__name__)                     # Create Flask app instance
     app.config.from_object(Config)            # Load config from Config class
 
     db.init_app(app)                          # Initialize SQLAlchemy with app
     migrate.init_app(app, db)                 # Initialize Alembic migrations
+
+    # ✅ Health check route
+    @app.route("/")
+    def health():
+        return {"status": "Backend is running"}, 200
 
     app.register_blueprint(
         api_bp,
