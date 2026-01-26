@@ -2,7 +2,7 @@ from flask import Flask                       # Flask core
 from database.db import db, migrate           # SQLAlchemy & Alembic instances
 from config import Config                     # App configuration
 from routes.api import api_bp                 # API blueprint
-
+from database.models import Contact
 
 def create_app():
     app = Flask(__name__)                     # Create Flask app instance
