@@ -3,7 +3,5 @@ services:
     name: socialcore-backend
     env: python
     plan: free
-    runtime: python
-    runtimeVersion: 3.12.10
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn app:app
