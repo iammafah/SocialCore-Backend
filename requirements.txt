@@ -1,24 +1,22 @@
-## 📦 Packages
-
-# Core Flask
+## Core Flask
 Flask==3.0.0
 
-# Database + ORM
+## Database + ORM
 SQLAlchemy>=2.0.30
 Flask-SQLAlchemy==3.1.1
 
-# MySQL Driver
-PyMySQL==1.1.0
+## PostgreSQL Driver (IMPORTANT)
+psycopg2-binary==2.9.6
 
-# Migrations
+## Migrations
 Flask-Migrate==4.0.5
 alembic==1.13.1
 
-# Validation
+## Validation
 marshmallow==3.21.1
 
-# Environment variables
+## Environment variables
 python-dotenv==1.0.0
 
+## Server
 gunicorn==21.2.0
-psycopg2-binary==2.9.6
