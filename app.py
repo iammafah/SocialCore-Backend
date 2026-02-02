@@ -1,32 +1,32 @@
-from flask import Flask                       # Flask core
-from database.db import db, migrate           # SQLAlchemy & Alembic instances
-from config import Config                     # App configuration
-from routes.api import api_bp                 # API blueprint
-from database.models import Contact
+from flask import Flask
+from flask_cors import CORS
+from database.db import db, migrate
+from config import Config
+from routes.api import api_bp
 
 
 def create_app():
-    app = Flask(__name__)                     # Create Flask app instance
-    app.config.from_object(Config)            # Load config from Config class
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-    db.init_app(app)                          # Initialize SQLAlchemy with app
-    migrate.init_app(app, db)                 # Initialize Alembic migrations
+    CORS(app)  # 🔥 allow browser requests
 
-    # ✅ Health check route
+    db.init_app(app)
+    migrate.init_app(app, db)
+
     @app.route("/")
     def health():
         return {"status": "Backend is running"}, 200
 
     app.register_blueprint(
         api_bp,
-        url_prefix="/iammafah"                # API base URL
+        url_prefix="/iammafah"
     )
 
-    return app                                # Return configured app
+    return app
 
 
-app = create_app()                            # Gunicorn entry point (DO NOT CHANGE)
-
+app = create_app()
 
 if __name__ == "__main__":
-    app.run()                                 # Local development only
+    app.run()
