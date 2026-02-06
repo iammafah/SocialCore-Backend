@@ -17,14 +17,16 @@ def create_contact():
     if errors:
         return jsonify(errors), 400
 
-    check = Contact.query.filter_by(Email=data['Email']).first()
+    email = data['Email'].strip().lower()
+
+    check = Contact.query.filter_by(Email=email).first()
     if check:
         return jsonify({'message': 'Email already exists'}), 400
 
     contact = Contact(
-        FullName=data['FullName'],
-        Email=data['Email'],
-        Message=data['Message']
+        FullName=data['FullName'].strip(),
+        Email=email,
+        Message=data['Message'].strip()
     )
 
     db.session.add(contact)
