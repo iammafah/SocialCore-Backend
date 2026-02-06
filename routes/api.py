@@ -17,15 +17,9 @@ def create_contact():
     if errors:
         return jsonify(errors), 400
 
-    email = data['Email'].strip().lower()
-
-    check = Contact.query.filter_by(Email=email).first()
-    if check:
-        return jsonify({'message': 'Email already exists'}), 400
-
     contact = Contact(
         FullName=data['FullName'].strip(),
-        Email=email,
+        Email=data['Email'].strip().lower(),
         Message=data['Message'].strip()
     )
 
