@@ -1,13 +1,19 @@
-from .db import db                # Import database instance
-class Contact(db.Model):         # ORM model for contact messages
-    __tablename__ = 'contact'    # Explicit table name
-    
-    id = db.Column(db.Integer, primary_key=True)         # Primary key
-    FullName = db.Column(db.String(100), nullable=False) # Sender full name
-    Email = db.Column(db.String(100), nullable=False)    # Sender email address
-    Message = db.Column(db.Text, nullable=False)         # Message content
+from .db import db                     
+
+class Contact(db.Model):    
+    __tablename__ = 'contact' 
+
+    id = db.Column(db.Integer, primary_key=True)  
+    FullName = db.Column(db.String(100), nullable=False)  
+    Email = db.Column(db.String(100), nullable=False)  
+    Message = db.Column(db.Text, nullable=False)  
+    admin_id = db.Column(db.Integer, nullable=False)  
+    ip_address = db.Column(db.String(45), nullable=True)  
+    country = db.Column(db.String(80), nullable=True)  
+    status = db.Column(db.String(20), nullable=False, default="new")  
+    priority = db.Column(db.String(20), nullable=False, default="normal")  
     created_at = db.Column(
-    db.DateTime,
-    nullable=False,
-    server_default=db.func.now()
-)                                                             # Timestamp
+        db.DateTime,
+        nullable=False,
+        server_default=db.func.now()
+    )
