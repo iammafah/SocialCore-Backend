@@ -1,11 +1,13 @@
-import requests   # HTTP API call ke liye
-from flask import Blueprint, request, jsonify   # Flask utilities
-from database.db import db                      # DB instance
+import requests
+from flask import Blueprint, request, jsonify
+from database.db import db
 from schemas.contact_schema import ContactSchema
 from database.models import Contact
 from utils.admin_guard import admin_required
+
 api_bp = Blueprint('api', __name__)
 schema = ContactSchema()
+
 
 @api_bp.route('/api/contacts', methods=['POST'])
 def create_contact():
@@ -18,30 +20,37 @@ def create_contact():
     if errors:
         return jsonify(errors), 400
 
-    ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
     # client IP detect
-    admin_id = 222333
+    ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
 
-    country = "Unknown"  # default value
+    # Render / proxy multiple IP bhej sakta hai
+    if ip_address and "," in ip_address:
+        ip_address = ip_address.split(",")[0].strip()
+
+    admin_id = 222333  # temporary admin
+
+    country = "Unknown"
 
     try:
-        res = requests.get(f"http://ip-api.com/json/{ip_address}").json()
-        country = res.get("country", "Unknown")  
-        # API se country nikaal rahe hain
-    except:
-        pass  # agar API fail ho jaye
+        res = requests.get(
+            f"http://ip-api.com/json/{ip_address}",
+            timeout=2
+        ).json()
+        country = res.get("country", "Unknown")
+    except Exception:
+        pass
 
     contact = Contact(
-        FullName=data['FullName'].strip(),  # name clean
-        Email=data['Email'].strip().lower(),  # email normalize
-        Message=data['Message'].strip(),  # message clean
-        admin_id=admin_id,  # temporary admin
-        ip_address=ip_address,  # IP save
-        country=country  # country save
+        FullName=data['FullName'].strip(),
+        Email=data['Email'].strip().lower(),
+        Message=data['Message'].strip(),
+        admin_id=admin_id,
+        ip_address=ip_address,
+        country=country
     )
 
-    db.session.add(contact)  # add to DB
-    db.session.commit()  # save
+    db.session.add(contact)
+    db.session.commit()
 
     return jsonify({'message': 'Contact created successfully'}), 201
 
@@ -50,6 +59,9 @@ def create_contact():
 @admin_required
 def get_admin_contacts():
     data = request.get_json()
+
+    if not data or "admin_id" not in data:
+        return jsonify({"error": "admin_id required"}), 400
 
     admin_id = data["admin_id"]
 
