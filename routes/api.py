@@ -1,5 +1,5 @@
 import requests
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify,g
 from database.db import db
 from schemas.contact_schema import ContactSchema
 from database.models import Contact
@@ -58,12 +58,7 @@ def create_contact():
 @api_bp.route("/api/admin/contacts", methods=["POST"])
 @admin_required
 def get_admin_contacts():
-    data = request.get_json()
-
-    if not data or "admin_id" not in data:
-        return jsonify({"error": "admin_id required"}), 400
-
-    admin_id = data["admin_id"]
+    admin_id = g.admin_id
 
     contacts = Contact.query.filter_by(admin_id=admin_id).all()
 
