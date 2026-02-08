@@ -1,12 +1,13 @@
-from marshmallow import Schema, fields, validate   # Marshmallow schema and field validators
+from marshmallow import Schema, fields
 
-class ContactSchema(Schema):                       # Schema for validating contact form data
-    FullName = fields.String(
-        required=True,
-        validate=validate.Length(min=3, max=100)
-    )                                         # Sender full name
-    Email = fields.Email(required=True)       # Validates email format
-    Message = fields.String(required=True)    # Message content
-    
-
-    
+class ContactSchema(Schema):
+    id = fields.Int()
+    FullName = fields.Str()
+    Email = fields.Str()
+    Message = fields.Str()
+    admin_id = fields.Int()
+    ip_address = fields.Str()
+    country = fields.Str()
+    status = fields.Str()
+    priority = fields.Str()
+    created_at = fields.DateTime()
