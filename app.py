@@ -3,7 +3,7 @@ from flask_cors import CORS
 from database.db import db, migrate
 from config import Config
 from routes.api import api_bp
-
+from utils.exporters.csv_exporter import csv_bp
 
 def create_app():
     app = Flask(__name__)
@@ -22,6 +22,7 @@ def create_app():
         api_bp,
         url_prefix="/iammafah"
     )
+    app.register_blueprint(csv_bp,url_prefix="/iammafah")
 
     return app
 
