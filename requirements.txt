@@ -26,3 +26,7 @@ flask-cors==4.0.0
 ## Server
 gunicorn==21.2.0
 requests==2.31.0
+
+## pdf and excel generation 
+openpyxl==3.1.2
+reportlab==4.0.7
