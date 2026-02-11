@@ -1,28 +1,34 @@
-import requests  # cloudflare verify call ke liye
-import os  # env secret read karne ke liye
-from dotenv import load_dotenv
+import requests
+import os
 
-load_dotenv()
 
-def verify_turnstile(token, ip=None):  # token frontend se aata hai
-    secret = os.getenv("TURNSTILE_SECRET_KEY")  # .env se secret key
+def verify_turnstile(token, ip=None):
+    secret = os.getenv("TURNSTILE_SECRET_KEY")
 
-    if not token:  # token missing
+    # secret missing guard
+    if not secret:
+        print("TURNSTILE_SECRET_KEY not set")
+        return False
+
+    if not token:
         return False
 
     try:
         response = requests.post(
             "https://challenges.cloudflare.com/turnstile/v0/siteverify",
             data={
-                "secret": secret,  # secret key
-                "response": token,  # frontend token
-                "remoteip": ip  # optional
+                "secret": secret,
+                "response": token,
+                "remoteip": ip
             },
             timeout=5
         )
 
-        result = response.json()  # cloudflare response
-        return result.get("success", False)  # success true/false
+        # response safe parse
+        result = response.json() if response.content else {}
 
-    except Exception:
+        return result.get("success", False)
+
+    except requests.RequestException as e:
+        print("Turnstile request error:", e)
         return False

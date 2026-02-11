@@ -13,28 +13,32 @@ schema = ContactSchema()
 
 @api_bp.route('/api/contacts', methods=['POST'])
 def create_contact():
-    data = request.get_json()  # JSON body read
+    data = request.get_json()
 
     if not data:
         return jsonify({"error": "No JSON data provided"}), 400
-    
-    token = data.get("token")
-    if not verify_turnstile(token, ip_address):
-        return jsonify({"error": "Turnstile verification failed"}), 403
-    
-    errors = schema.validate(data)  # validation
-    if errors:
-        return jsonify(errors), 400
 
-    # client IP detect
+    # client IP detect (pehle)
     ip_address = request.headers.get('X-Forwarded-For', request.remote_addr)
 
-    # Render / proxy multiple IP bhej sakta hai
     if ip_address and "," in ip_address:
         ip_address = ip_address.split(",")[0].strip()
 
-    admin_id = 222333  # temporary admin
+    token = data.get("token")
 
+    if not token:
+        return jsonify({"error": "Captcha token missing"}), 400
+
+    # postman testing bypass
+    if token != "test":
+        if not verify_turnstile(token, ip_address):
+            return jsonify({"error": "Turnstile verification failed"}), 403
+
+    errors = schema.validate(data)
+    if errors:
+        return jsonify(errors), 400
+
+    admin_id = 222333
     country = "Unknown"
 
     try:
@@ -45,8 +49,7 @@ def create_contact():
         country = res.get("country", "Unknown")
     except Exception:
         pass
-    
-    
+
     contact = Contact(
         FullName=data['FullName'].strip(),
         Email=data['Email'].strip().lower(),
@@ -60,7 +63,6 @@ def create_contact():
     db.session.commit()
 
     return jsonify({'message': 'Contact created successfully'}), 201
-
 
 @api_bp.route("/api/admin/contacts", methods=["POST"])
 @admin_required
