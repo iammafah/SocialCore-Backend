@@ -5,12 +5,12 @@ import os
 def verify_turnstile(token, ip=None):
     secret = os.getenv("TURNSTILE_SECRET_KEY")
 
-    # secret missing guard
     if not secret:
         print("TURNSTILE_SECRET_KEY not set")
         return False
 
     if not token:
+        print("TURNSTILE TOKEN MISSING")
         return False
 
     try:
@@ -24,8 +24,10 @@ def verify_turnstile(token, ip=None):
             timeout=5
         )
 
-        # response safe parse
         result = response.json() if response.content else {}
+
+        # DEBUG OUTPUT
+        print("TURNSTILE VERIFY RESULT:", result)
 
         return result.get("success", False)
 
