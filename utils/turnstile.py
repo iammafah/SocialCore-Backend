@@ -1,6 +1,8 @@
 import requests  # cloudflare verify call ke liye
 import os  # env secret read karne ke liye
+from dotenv import load_dotenv
 
+load_dotenv()
 
 def verify_turnstile(token, ip=None):  # token frontend se aata hai
     secret = os.getenv("TURNSTILE_SECRET_KEY")  # .env se secret key
