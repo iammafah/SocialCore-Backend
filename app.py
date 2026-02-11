@@ -7,6 +7,8 @@ from utils.exporters.csv_exporter import csv_bp
 from utils.exporters.xlsx_exporter import xlsx_bp  # xlsx exporter
 from utils.exporters.pdf_exporter import pdf_bp  # pdf exporter
 
+
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)

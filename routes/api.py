@@ -4,6 +4,8 @@ from database.db import db
 from schemas.contact_schema import ContactSchema
 from database.models import Contact
 from utils.admin_guard import admin_required
+from utils.turnstile import verify_turnstile
+
 
 api_bp = Blueprint('api', __name__)
 schema = ContactSchema()
@@ -15,7 +17,11 @@ def create_contact():
 
     if not data:
         return jsonify({"error": "No JSON data provided"}), 400
-
+    
+    token = data.get("token")
+    if not verify_turnstile(token, ip_address):
+        return jsonify({"error": "Turnstile verification failed"}), 403
+    
     errors = schema.validate(data)  # validation
     if errors:
         return jsonify(errors), 400
@@ -39,7 +45,8 @@ def create_contact():
         country = res.get("country", "Unknown")
     except Exception:
         pass
-
+    
+    
     contact = Contact(
         FullName=data['FullName'].strip(),
         Email=data['Email'].strip().lower(),
