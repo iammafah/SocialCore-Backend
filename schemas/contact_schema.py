@@ -11,4 +11,5 @@ class ContactSchema(Schema):
     status = fields.Str()
     priority = fields.Str()
     created_at = fields.DateTime()
-    token = fields.Str(required=True)
+    token = fields.Str(required=True, load_only=True)
+

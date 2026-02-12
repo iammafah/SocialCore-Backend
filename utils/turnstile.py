@@ -6,11 +6,7 @@ def verify_turnstile(token, ip=None):
     secret = os.getenv("TURNSTILE_SECRET_KEY")
 
     if not secret:
-        print("TURNSTILE_SECRET_KEY not set")
-        return False
-
-    if not token:
-        print("TURNSTILE TOKEN MISSING")
+        print("TURNSTILE_SECRET_KEY missing")
         return False
 
     try:
@@ -18,19 +14,16 @@ def verify_turnstile(token, ip=None):
             "https://challenges.cloudflare.com/turnstile/v0/siteverify",
             data={
                 "secret": secret,
-                "response": token,
-                "remoteip": ip
+                "response": token
             },
             timeout=5
         )
 
-        result = response.json() if response.content else {}
-
-        # DEBUG OUTPUT
-        print("TURNSTILE VERIFY RESULT:", result)
+        result = response.json()
+        print("TURNSTILE RESULT:", result)
 
         return result.get("success", False)
 
-    except requests.RequestException as e:
-        print("Turnstile request error:", e)
+    except Exception as e:
+        print("TURNSTILE ERROR:", e)
         return False
